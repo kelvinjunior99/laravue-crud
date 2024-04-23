@@ -1,19 +1,30 @@
 <?php
 
-use App\Http\Controllers\CadastrarController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ListaController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', [HomeController::class, 'home'])->name('home');
-Route::get('lista', [ListaController::class, 'lista'])->name('lista');
+Route::get('/', function () {
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
+});
 
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('cadastrar', [CadastrarController::class, 'cadastrar'])->name('cadastrar');
-Route::post('create', [CadastrarController::class, 'create'])->name('create');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-Route::get('/cadastro/{dados}/editar', [CadastrarController::class, 'editar'])->name('editar');
+   Route::resource('user', UserController::class);
+});
 
-
-Route::put('/update/{dados}', [CadastrarController::class, 'update'])->name('update');
+require __DIR__.'/auth.php';
