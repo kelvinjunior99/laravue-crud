@@ -41,6 +41,9 @@ Route::middleware('auth')->group(function () {
     Route::put('/livro/{livro}', [LivroController::class, 'update'])->name('livro.update');
     Route::delete('/livro/{livro}', [LivroController::class, 'destroy'])->name('livro.destroy');
 
-    //Route::get('/livros/search', [LivroController::class, 'search'])->name('livros.search');
+   //Route::get('/livros/search', [LivroController::class, 'search'])->name('livros.search');
+
+    Route::get('livro/user/profile', [UserController::class, 'profile'])->name('user.profile');
+    Route::put('livro/user/{user}', [UserController::class, 'update'])->name('user.update');
 
 });

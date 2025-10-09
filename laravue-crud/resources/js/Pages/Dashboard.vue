@@ -40,6 +40,7 @@ const menuItems = [
   { title: 'Início', path: '/livraria' },
   { title: 'Cadastrar', path: '/livro/create' },
   { title: 'Lista', path: '/livros' },
+  { title: 'Perfil', path: '/livro/user/profile' },
 ];
 
 const services = [

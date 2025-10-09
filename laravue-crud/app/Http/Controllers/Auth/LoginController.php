@@ -35,6 +35,10 @@ class LoginController extends Controller
         if (Auth::attempt($credencias, $request->remember)) {
             $request->session()->regenerate();
 
+             Auth::user()->update([
+                'last_login_at' => now(),
+            ]);
+            
             return redirect()->intended('livraria');
             
         } else {

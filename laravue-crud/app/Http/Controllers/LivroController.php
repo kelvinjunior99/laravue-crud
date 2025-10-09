@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreLivroRequest;
 use App\Http\Requests\UpdateLivroRequest;
+use App\Models\Actividade;
 use App\Models\Livro;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -56,7 +57,15 @@ class LivroController extends Controller
 
         try {
             $user = \Illuminate\Support\Facades\Auth::user();
-            $user->livros()->create($request->validated());
+            $livro = $user->livros()->create($request->validated());
+
+            Actividade::create([
+                'user_id' => $user->id,
+                'action' => 'Cadastrou um novo livro',
+                'tipo' => 'cadastrou_livro',
+                'subject_type' => Livro::class,
+                'subject_id' => $livro->id,
+            ]);
 
             return redirect()->route('livros.create')
                 ->with('success', 'Livro cadastrado com sucesso!');
